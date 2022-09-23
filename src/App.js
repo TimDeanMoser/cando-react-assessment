@@ -1,15 +1,18 @@
+import 'antd/dist/antd.css';
 import './App.css';
+import {Divider} from 'antd';
+import Header from "./components/Header";
+import Movies from "./components/Movies";
 
-function App() {
-  return (
-    <div className="App">
-        <header>hello</header>
-        <div>
-            body
+
+const App = () => {
+    return (
+        <div className="App">
+            <Header/>
+            <Divider style={{marginTop: "0px"}}/>
+            <Movies/>
         </div>
-
-    </div>
-  );
-}
+    );
+};
 
 export default App;

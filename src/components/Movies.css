@@ -1,0 +1,10 @@
+.gradient {
+    position:absolute;
+    z-index:2;
+    right:0; bottom:0; left:80%;
+    height:100%;
+    width:100vw;
+    overflow: hidden;
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(20%,rgba(255,255,255,1)));
+    pointer-events: none;
+}
