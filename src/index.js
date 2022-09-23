@@ -19,7 +19,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false}/>
+            {/*<ReactQueryDevtools initialIsOpen={false}/>*/}
             <Routes>
                 <Route path="/" element={
                     <App/>

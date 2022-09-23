@@ -8,7 +8,13 @@ const SearchField = () => {
         defaultValue={searchParams.get("q")}
         placeholder="Search for movies"
         onSearch={(v) => {
-            setSearchParams({["q"]: v})
+            if(!v){
+                searchParams.delete('q')
+                setSearchParams(searchParams)
+            }
+            else{
+                setSearchParams({["q"]: v})
+            }
         }}/>
 }
 

@@ -1,6 +1,6 @@
 import {getMovies} from "../axios/wookie";
 import {useQuery} from "react-query";
-import {Image} from "antd";
+import {Button, Image, Result, Spin} from "antd";
 import "./Movies.css"
 import Details from "./Details";
 import {useSearchParams} from "react-router-dom"
@@ -11,7 +11,7 @@ const Genre = ({movies, name}) => {
     return <div style={{position: "relative", overflowX: "hidden"}}>
         <h1>{name}</h1>
         <div style={{display: "flex", width: "100vw", overflowX: "auto", overflowY: "hidden"}}>
-            {movies.map(m => <Movie data={m}/>)}
+            {movies.map(m => <Movie data={m} key={m.id+"_movie"}/>)}
         </div>
         <div className={"gradient"}/>
     </div>
@@ -26,6 +26,7 @@ const Movie = ({data}) => {
             setSearchParams(searchParams);
         }}/>
         <Image
+            key={data.id}
             preview={{visible: false, mask: <p style={{padding: "10px"}}>{data.title}</p>}}
             style={{width: "calc((100vw / 4) - 2rem)", boxShadow: "inset 0 0 200px #000000"}}
             src={data.backdrop}
@@ -38,14 +39,12 @@ const Movie = ({data}) => {
 }
 
 const Movies = () => {
-
     const [searchParams, setSearchParams] = useSearchParams();
     const {data, isLoading, error} = useQuery(
         ["movies", searchParams.get('q') ?? ""],
         () => getMovies(searchParams.get('q') ?? ""),
         {}
     );
-    // some calculation against the queried data
     const moviesByGenre = useMemo(() => {
         if (!data) return {};
         return data.movies?.reduce(function (r, a) {
@@ -62,16 +61,18 @@ const Movies = () => {
             return r;
         }, Object.create(null));
     }, [data]);
-    if (isLoading) {
-        return <p>loading</p>
+    if (isLoading || error) {
+        return <div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "70vh"}}>
+            {isLoading ? <Spin/> : <Result
+                status="500"
+                title="Sorry, something went wrong."
+                subTitle="Try refreshing the page"
+            />}
+        </div>
     }
-    if (error) {
-        return <p>error</p>
-    }
-    console.log(moviesByGenre)
     return <div style={{padding: "0 1rem"}}>
         {moviesByGenre && Object.entries(moviesByGenre).map(([genre, movies]) => {
-            return <Genre name={genre} movies={movies}/>
+            return <Genre name={genre} movies={movies} key={genre}/>
         })}
     </div>
 }
